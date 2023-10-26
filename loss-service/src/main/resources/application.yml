@@ -1,0 +1,9 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;database=ajdbase;encrypt=false
+    username: sa
+    password: 123456

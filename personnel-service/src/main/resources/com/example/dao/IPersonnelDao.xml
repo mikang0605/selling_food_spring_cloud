@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.example.dao.IPersonnelDao">
+    <select id="getList" resultType="com.example.pojo.Personnel">
+        select * from Trsda a inner join depart b on a.depart = b.CODE
+        <where>
+            state != '注销'
+            <if test="code != 'all'">
+                and a.depart like concat(#{code,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="keyword != null">
+                and ( a.kh like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+                or a.xm like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+                or a.glh like concat('%',#{keyword,jdbcType=VARCHAR},'%'))
+            </if>
+        </where>
+        order by a.id
+        offset ( #{currentPage} - 1 ) * #{pageSize} rows
+        fetch next #{pageSize} rows only
+     </select>
+
+    <insert id="addPersonnel">
+        insert into Trsda (userid,
+                           kh,
+                           xm,
+                           xb,
+                           lb,
+                           depart,
+                           bc,
+                           glh,
+                           sfzh,
+                           fksj,
+                           bz,
+                           state,
+                           idbz,
+                           rylb,
+                           fwfag,
+                           fwgxrq,
+                           xfrq,
+                           userid1,
+                           userid2,
+                           userpass,
+                           photo,
+                           telphone,
+                           sdate,
+                           edate,
+                           khsn,
+                           strbz) values
+                                      ((select max(userid)+1 from trsda ),
+                                       #{kh},
+                                       #{xm},
+                                       #{xb},
+                                       #{lb},
+                                       #{depart},
+                                       #{bc},
+                                       #{glh},
+                                       #{sfzh},
+                                       #{sdate},
+                                       '已发卡',
+                                       '正常',
+                                       #{idbz},
+                                       #{rylb},
+                                       #{fwfag},
+                                       #{fwgxrq},
+                                       #{xfrq},
+                                       #{userid1},
+                                       #{userid2},
+                                       #{userpass},
+                                       #{photo},
+                                       #{telphone},
+                                       #{sdate},
+                                       #{edate},
+                                       #{khsn},
+                                       #{strbz})
+    </insert>
+
+    <update id="updatePersonnel">
+        update Trsda set kh = #{kh},
+                         xm = #{xm},
+                         xb = #{xb},
+                         rylb = #{rylb},
+                         glh = #{glh},
+                         lb = #{lb},
+                         sfzh = #{sfzh},
+                         je = #{je},
+                         telphone = #{telphone},
+                         strbz = #{strbz},
+                         sdate = #{sdate},
+                         edate = #{edate}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="deletePersonnel">
+        delete from Trsda where id = #{id}
+    </delete>
+
+    <select id="getTotalPersonnel" resultType="java.lang.Integer">
+        select count(*) from Trsda
+        <where>
+            state != '注销'
+            <if test="code != 'all'">
+                and depart like concat(#{code,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="keyword != null">
+                and ( kh like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+                or xm like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+                or glh like concat('%',#{keyword,jdbcType=VARCHAR},'%') )
+            </if>
+        </where>
+    </select>
+
+    <select id="getExportList" resultType="com.example.pojo.PersonnelExport">
+        select * from Trsda a inner join depart b on a.depart = b.CODE
+    </select>
+
+    <update id="loss">
+        update Trsda set state = '挂失' where userid = #{userid}
+    </update>
+
+    <select id="getUserInfoByUserid" resultType="com.example.pojo.Personnel">
+        select * from Trsda where userid = #{userid}
+    </select>
+
+    <update id="unhook">
+        update Trsda set state = '正常' where userid = #{userid}
+    </update>
+
+    <select id="selectStatus" resultType="java.lang.String">
+        select state from Trsda where userid = #{userid}
+    </select>
+
+    <update id="changeCardNum">
+        update Trsda set kh = #{kh} where userid = #{userid}
+    </update>
+
+    <update id="changeStatusToLogoff">
+        update Trsda set state = '注销' where userid = #{userid}
+    </update>
+
+</mapper>

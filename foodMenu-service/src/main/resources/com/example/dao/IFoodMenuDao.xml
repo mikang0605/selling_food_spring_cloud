@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.example.dao.IFoodMenuDao">
+
+    <select id="getFoodMenuList" resultType="com.example.pojo.FoodMenu">
+        select * from Food_Menu
+        <where>
+            <if test="menu_name != null and menu_name != ''">
+                and menu_name like concat('%',#{menu_name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="menutype != null and menutype != ''">
+                and menutype = #{menutype}
+            </if>
+            <if test="stype != null and stype != ''">
+                and stype = #{stype}
+            </if>
+        </where>
+        order by id desc
+        offset ( #{currentPage} - 1 ) * #{pageSize} rows
+        fetch next #{pageSize} rows only
+    </select>
+
+    <select id="getFoodMenuNum" resultType="java.lang.Integer">
+        select count(*) from Food_Menu
+        <where>
+            <if test="menu_name != null and menu_name != ''">
+                and menu_name like concat('%',#{menu_name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="menutype != null and menutype != ''">
+                and menutype = #{menutype}
+            </if>
+            <if test="stype != null and stype != ''">
+                and stype = #{stype}
+            </if>
+        </where>
+    </select>
+
+    <select id="getNoRepeat" resultType="java.lang.Integer">
+        select count(*) from Food_Menu where menu_no = #{number}
+    </select>
+
+</mapper>

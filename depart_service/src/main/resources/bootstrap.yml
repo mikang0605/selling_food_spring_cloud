@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: depart-service
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml

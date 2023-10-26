@@ -1,0 +1,100 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    database: 6
+    password: 123456
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池最大连接数 默认8 ，负数表示没有限制
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认-1
+        max-wait: -1
+        # 连接池中的最大空闲连接 默认8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认0
+        min-idle: 0
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+
+        - id: nav-service
+          uri: lb://navigator-service
+          predicates:
+            - Path=/nav/**
+          filters:
+            - StripPrefix=1
+
+        - id: depart-service
+          uri: lb://depart-service
+          predicates:
+            - Path=/depart/**
+          filters:
+            - StripPrefix=1
+
+        - id: personnel-service
+          uri: lb://personnel-service
+          predicates:
+            - Path=/personnel/**
+          filters:
+            - StripPrefix=1
+
+        - id: card-service
+          uri: lb://card-service
+          predicates:
+            - Path=/card/**
+          filters:
+            - StripPrefix=1
+
+        - id: card-refund-service
+          uri: lb://card-refund-service
+          predicates:
+            - Path=/cardrefund/**
+          filters:
+            - StripPrefix=1
+
+        - id: card-replace-service
+          uri: lb://card-replace-service
+          predicates:
+            - Path=/cardreplace/**
+          filters:
+            - StripPrefix=1
+
+        - id: food-type-service
+          uri: lb://food-type-service
+          predicates:
+            - Path=/foodtype/**
+          filters:
+            - StripPrefix=1
+
+        - id: food-menu-service
+          uri: lb://food-menu-service
+          predicates:
+            - Path=/foodmenu/**
+          filters:
+            - StripPrefix=1
+
+        - id: food-menu-service
+          uri: lb://food-menu-service
+          predicates:
+            - Path=/img/**
+
+        - id: loss-service
+          uri: lb://loss-service
+          predicates:
+            - Path=/loss/**
+          filters:
+            - StripPrefix=1

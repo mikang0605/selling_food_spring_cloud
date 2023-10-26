@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.example.dao.ILossDao">
+
+    <select id="getAllLoss" resultType="com.example.pojo.Loss">
+        select * from Tgsmx a, Trsda b
+        <where>
+            a.userid = b.userid
+            <if test="depart != null">
+                and b.depart like concat(#{depart,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="userid != null">
+                and a.userid = #{userid}
+            </if>
+            <if test="lossDate != null and lossDate != ''">
+                and a.rq = #{lossDate}
+            </if>
+            <if test="unhookDate != null and unhookDate != ''">
+                and a.jgrq = #{unhookDate}
+            </if>
+        </where>
+        order by a.id desc
+        offset ( #{currentPage} - 1 ) * #{pageSize} rows
+        fetch next #{pageSize} rows only
+    </select>
+    <select id="getLossNum" resultType="java.lang.Integer">
+        select count(*) from Tgsmx a, Trsda b
+        <where>
+            a.userid = b.userid
+            <if test="depart != null">
+                and b.depart like concat(#{depart,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="userid != null">
+                and a.userid = #{userid}
+            </if>
+            <if test="lossDate != null and lossDate != ''">
+                and a.rq = #{lossDate}
+            </if>
+            <if test="unhookDate != null and unhookDate != ''">
+                and a.jgrq = #{unhookDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

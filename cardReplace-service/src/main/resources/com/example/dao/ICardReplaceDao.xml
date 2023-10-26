@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.example.dao.ICardReplaceDao">
+
+    <select id="getCardReplaceTable" resultType="com.example.pojo.CardReplace">
+        select * from Thk a, Trsda b, depart c where a.userid = b.userid and b.depart = c.CODE
+        <if test="userid != null">
+            and a.userid = #{userid}
+        </if>
+        <if test="departCode != null">
+            and c.CODE like concat(#{departCode,jdbcType=VARCHAR},'%')
+        </if>
+        order by a.id desc
+        offset ( #{currentPage} - 1 ) * #{pageSize} rows
+        fetch next #{pageSize} rows only
+    </select>
+
+    <select id="getCardReplaceTableNum" resultType="java.lang.Integer">
+        select count(*) from Thk a, Trsda b, depart c
+        <where>
+            a.userid = b.userid and b.depart = c.CODE
+            <if test="userid != null">
+                and a.userid = #{userid}
+            </if>
+            <if test="departCode != null">
+                and c.CODE like concat(#{departCode,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

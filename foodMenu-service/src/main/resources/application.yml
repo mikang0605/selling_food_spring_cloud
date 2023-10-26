@@ -1,0 +1,18 @@
+server:
+  port: 8089
+
+spring:
+  datasource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;database=ajdbase;encrypt=false
+    username: sa
+    password: 123456
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
